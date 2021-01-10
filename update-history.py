@@ -59,7 +59,7 @@ def load_csv(filename):
         return columns
 
 savefile_all = "vacc-history/regioni-history.json"
-regions_to_consider = ["P.A. Bolzano", "Sardegna"]
+regions_to_consider = ["all"]
 savefiles_calc_base = "vacc-history"
 inhabitants_file = "popolazione.json"
 
@@ -68,6 +68,12 @@ date_vaccination_start = "2020-12-27"
 header = ["d","vcc","sum_1d","sum_monotone_1d","sum_2d","sum_monotone_2d","perc_doses",
     "perc_inh_1d", "perc_inh_monotone_1d", "perc_inh_2d", "perc_inh_monotone_2d", "date"]
 
+# -- get new data --
+regjs = scraper.get_region_json()
+if "all" in regions_to_consider:
+    regions_to_consider = list(regjs.keys())
+today = datetime.today().strftime('%Y-%m-%d')
+regjs["date"] = today
 
 # -- load population numbers --
 try:
@@ -76,11 +82,6 @@ try:
 except:
     print("No population data file found ({})".format(inhabitants_file))
     inhabitants = {k : -1 for k in regions_to_consider}
-
-# -- get new data --
-regjs = scraper.get_region_json()
-today = datetime.today().strftime('%Y-%m-%d')
-regjs["date"] = today
 
 # -- check specific region --
 for region_name in regions_to_consider:
