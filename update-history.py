@@ -96,7 +96,7 @@ for region_name in regions_to_consider:
 
     today_count = regjs[region_name][0]
     perc_of_doses = regjs[region_name][1]
-    print("Today counter {}: {}".format(region_name,today_count))
+    # print("Today counter {}: {}".format(region_name,today_count))
 
     # -- update calculations for specific region --
     # if not enough rows, fill with interpolation from the last inserted day up to today
@@ -122,7 +122,7 @@ for region_name in regions_to_consider:
         print("{}: subsitute today with updated calculations".format(region_name))
         subst_last_row(loaded, today_count, perc_of_doses, inhabitants[region_name], today)
     with open(savefile_calc, "w") as f:
-        cwr = csv.writer(f)
+        cwr = csv.writer(f, lineterminator="\n")
         cwr.writerow(header)
         for row in zip(*[loaded[k] for k in header]):
             cwr.writerow(row)
