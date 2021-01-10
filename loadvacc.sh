@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # make sure you cd to the repo first
-git pull
+git pull > /dev/null
 
 python update-history.py
 
