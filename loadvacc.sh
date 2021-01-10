@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# make sure you are on branch data (install-updater.sh puts you there)
+# make sure you cd to the repo first
 git pull
 
 python update-history.py
 
-if ! git diff --quiet vacc-history/P.A.\ Bolzano.csv
+if ! git diff --quiet vacc-history/
 then
         today=$(date +"%Y-%m-%d")
 	git add vacc-history/
