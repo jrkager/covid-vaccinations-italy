@@ -15,3 +15,9 @@ The columns are:
 - **perc_inh_2d**: percentage of inhabitants of region that fot the first and second dose
 - **perc_inh_monotone_2d**: like perc_inh_2d but never dropping
 - **date**: date of this row's data
+
+
+## Installation
+Run `sh install-updater.sh`. It pulls from remote and then installs a cronjob to run `sh loadvacc.sh` every 30 minutes.
+
+`loadvacc.sh` itself runs `python update-history.py` and adds, commits and pushes the modifications to remote if any file was changed.
