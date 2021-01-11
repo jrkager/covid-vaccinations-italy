@@ -69,10 +69,13 @@ header = ["d","vcc","sum_1d","sum_monotone_1d","sum_2d","sum_monotone_2d","perc_
     "perc_inh_1d", "perc_inh_monotone_1d", "perc_inh_2d", "perc_inh_monotone_2d", "date"]
 
 # -- get new data --
+timestamp = datetime.today()
+today = timestamp.strftime('%Y-%m-%d')
+print("Loading new data ({})".format(timestamp.strftime("%Y-%m-%d %H:%M")))
+print("Regions: " + ", ".join(regions_to_consider))
 regjs = scraper.get_region_json()
 if "all" in regions_to_consider:
     regions_to_consider = list(regjs.keys())
-today = datetime.today().strftime('%Y-%m-%d')
 regjs["date"] = today
 
 # -- load population numbers --
@@ -84,14 +87,18 @@ except:
     inhabitants = {k : -1 for k in regions_to_consider}
 
 # -- check specific region --
+regions_changed = False
 for region_name in regions_to_consider:
+    changed = False
     savefile_calc = os.path.join(savefiles_calc_base, region_name + ".csv")
     if not os.path.exists(savefile_calc):
+        print("Creating new table for " + region_name + "...")
         with open(savefile_calc,"w") as f:
             f.write(",".join(header) + "\n")
             day_before_start = (datetime.fromisoformat(date_vaccination_start) -
                                         timedelta(days=1)).strftime('%Y-%m-%d')
             f.write(",".join(["0"]*(len(header)-1)) + "," + day_before_start + "\n")
+        changed = True
     loaded = load_csv(savefile_calc)
 
     today_count = regjs[region_name][0]
@@ -117,15 +124,22 @@ for region_name in regions_to_consider:
                                      interpolation_date):
             # add row to csv data
             add_row(loaded, count, perc, inhabitants[region_name], date)
+        changed = True
     elif loaded["vcc"][-1] != today_count or loaded["perc_doses"][-1] != perc_of_doses:
         # if we started the script for a second time this day, substitute last line with new data
         print("{}: subsitute today with updated calculations".format(region_name))
         subst_last_row(loaded, today_count, perc_of_doses, inhabitants[region_name], today)
-    with open(savefile_calc, "w") as f:
-        cwr = csv.writer(f, lineterminator="\n")
-        cwr.writerow(header)
-        for row in zip(*[loaded[k] for k in header]):
-            cwr.writerow(row)
+        changed = True
+    if changed:
+        regions_changed = True
+        with open(savefile_calc, "w") as f:
+            cwr = csv.writer(f, lineterminator="\n")
+            cwr.writerow(header)
+            for row in zip(*[loaded[k] for k in header]):
+                cwr.writerow(row)
+
+if not regions_changed:
+    print("None of the considered regions was updated.")
 
 
 # -- update all-regions-stats file --
@@ -139,11 +153,12 @@ except:
 
 # only if something changed
 regjs = {k : list(v) if isinstance(v, tuple) else v for k, v in regjs.items()}
-
 if cont[-1] != regjs: # compare dicts in keys and vals
     if today == latest_date:
-        print("subst last day in regions")
+        print("Substitute last day in regions-history")
         del cont[-1]
+    else:
+        print("New day in regions-history")
     cont.append(regjs)
     with open(savefile_all, "w") as f:
         json.dump(cont, f, indent=4)
