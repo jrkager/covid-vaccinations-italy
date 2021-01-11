@@ -73,10 +73,10 @@ timestamp = datetime.today()
 today = timestamp.strftime('%Y-%m-%d')
 print("Loading new data ({})".format(timestamp.strftime("%Y-%m-%d %H:%M")))
 print("Regions: " + ", ".join(regions_to_consider))
+print("-")
 regjs = scraper.get_region_json()
 if "all" in regions_to_consider:
     regions_to_consider = list(regjs.keys())
-regjs["date"] = today
 
 # -- load population numbers --
 try:
@@ -84,7 +84,7 @@ try:
         inhabitants=json.load(f)
 except:
     print("No population data file found ({})".format(inhabitants_file))
-    inhabitants = {k : -1 for k in regions_to_consider}
+    inhabitants = {k : -1 for k in regjs.keys()}
 
 # -- check specific region --
 regions_changed = False
@@ -140,7 +140,7 @@ for region_name in regions_to_consider:
 
 if not regions_changed:
     print("None of the considered regions was updated.")
-
+print("-")
 
 # -- update all-regions-stats file --
 latest_date = None
@@ -153,12 +153,26 @@ except:
 
 # only if something changed
 regjs = {k : list(v) if isinstance(v, tuple) else v for k, v in regjs.items()}
-if cont[-1] != regjs: # compare dicts in keys and vals
+# get only the first 3 values (the fourth is calculated locally)
+tempcont = {k : v[0:3] for k,v in cont[-1]["regions"].items()}
+if tempcont != regjs: # compare dicts in keys and vals
     if today == latest_date:
         print("Substitute last day in regions-history")
         del cont[-1]
     else:
         print("New day in regions-history")
+    # append value somministrazioni / abitanti
+    for rn, rv in regjs.items():
+        if inhabitants[rn] == -1:
+            rv.append(-1)
+        else:
+            rv.append(rv[0] / inhabitants[rn])
+    regjs = {"date" : today,
+             "regions" : regjs}
     cont.append(regjs)
     with open(savefile_all, "w") as f:
         json.dump(cont, f, indent=4)
+else:
+    print("regions-history was already up-to-date.")
+
+print()
