@@ -146,4 +146,4 @@ if cont[-1] != regjs: # compare dicts in keys and vals
         del cont[-1]
     cont.append(regjs)
     with open(savefile_all, "w") as f:
-        json.dump(cont, f)
+        json.dump(cont, f, indent=4)
