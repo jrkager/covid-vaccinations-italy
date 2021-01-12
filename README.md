@@ -4,7 +4,7 @@ Tracks vaccinations data region by region for Italy and calculates approximate n
 A `{regionname}.csv` lists data day-by-day. If the script is started multiple times a day, the last line is always subsituted by the newest data. That is, each line shows the data for that day at the time of the last run of the script on that day. (started logging on 2021-01-10. Data before that day was linearly interpolated)
 The columns are:
 
-- **d**: vaccinations given on a specific day (difference sum until today - sum until yesterday)
+- **d**: first doses given on a specific day (difference sum until today - sum until yesterday - first doses given 21 days ago)
 - **vcc**: total vaccinations given until now
 - **sum_1d**: total first dose vaccinations until now (could sink temporarily since we just approximate by subsituting the number of first doses 21 days ago)
 - **sum_monotone_1d**: like sum_1d but never dropping (i.e. the maximum of all past sum_1d values)
