@@ -73,7 +73,7 @@ timestamp = datetime.today()
 today = timestamp.strftime('%Y-%m-%d')
 print("Loading new data ({})".format(timestamp.strftime("%Y-%m-%d %H:%M")))
 print("Regions: " + ", ".join(regions_to_consider))
-print("-")
+print()
 regjs = scraper.get_region_json()
 if "all" in regions_to_consider:
     regions_to_consider = list(regjs.keys())
@@ -140,7 +140,7 @@ for region_name in regions_to_consider:
 
 if not regions_changed:
     print("None of the considered regions was updated.")
-print("-")
+print()
 
 # -- update all-regions-stats file --
 latest_date = None
@@ -175,4 +175,4 @@ if tempcont != regjs: # compare dicts in keys and vals
 else:
     print("regions-history was already up-to-date.")
 
-print()
+print("-")
