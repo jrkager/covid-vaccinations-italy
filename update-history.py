@@ -9,7 +9,7 @@ import importlib
 scraper = importlib.import_module("data-scraper")
 
 def subst_last_row(loaded, vacc_count, perc_of_doses, inhabitants, today):
-    loaded["vcc"][-1] = vacc_count
+    loaded["sum_doses"][-1] = vacc_count
     loaded["perc_doses"][-1] = perc_of_doses
     loaded["date"][-1] = today
     calc(loaded, inhabitants)
@@ -21,17 +21,17 @@ def add_row(loaded, *args, **kvargs):
 
 def calc(data, inhabitants):
     intervall=21
-    heute = len(data["vcc"]) - 1
+    heute = len(data["sum_doses"]) - 1
     if heute == 0:
         return
     if heute < intervall + 1:
-        data["d"][heute] = data["vcc"][heute]-data["vcc"][heute-1]
+        data["delta_1d"][heute] = data["sum_doses"][heute]-data["sum_doses"][heute-1]
     else:
-        data["d"][heute] = data["vcc"][heute]-data["vcc"][heute-1]-data["d"][heute-intervall]
-    data["sum_1d"][heute] = data["d"][heute] + data["sum_1d"][heute-1]
+        data["delta_1d"][heute] = data["sum_doses"][heute]-data["sum_doses"][heute-1]-data["delta_1d"][heute-intervall]
+    data["sum_1d"][heute] = data["delta_1d"][heute] + data["sum_1d"][heute-1]
     data["sum_monotone_1d"][heute] = max([data["sum_1d"][heute],
                                         data["sum_monotone_1d"][heute - 1]])
-    data["sum_2d"][heute] = data["vcc"][heute]-data["vcc"][heute-1]-data["d"][heute]
+    data["sum_2d"][heute] = data["sum_doses"][heute]-data["sum_doses"][heute-1]-data["delta_1d"][heute]
     data["sum_monotone_2d"][heute] = max([data["sum_2d"][heute],
                                         data["sum_monotone_2d"][heute - 1]])
     if inhabitants > 0:
@@ -65,7 +65,7 @@ inhabitants_file = "popolazione.json"
 
 date_vaccination_start = "2020-12-27"
 
-header = ["d","vcc","sum_1d","sum_monotone_1d","sum_2d","sum_monotone_2d","perc_doses",
+header = ["delta_1d","sum_doses","sum_1d","sum_monotone_1d","sum_2d","sum_monotone_2d","perc_doses",
     "perc_inh_1d", "perc_inh_monotone_1d", "perc_inh_2d", "perc_inh_monotone_2d", "date"]
 
 # -- get new data --
@@ -110,11 +110,11 @@ for region_name in regions_to_consider:
     # (1 entry per day since vaccination start)
     diff = (datetime.fromisoformat(today)-datetime.fromisoformat(date_vaccination_start)).days
     days_of_vacc = diff + 1
-    missing_days = days_of_vacc - (len(loaded["vcc"]) - 1)
+    missing_days = days_of_vacc - (len(loaded["sum_doses"]) - 1)
     if missing_days > 0:
         print("{}: add values for {} day(s)".format(region_name, missing_days))
         interpolation_count = map(int,
-                         np.linspace(loaded["vcc"][-1], today_count, missing_days+1)[1:])
+                         np.linspace(loaded["sum_doses"][-1], today_count, missing_days+1)[1:])
         interpolation_perc = [perc_of_doses] * missing_days
         interpolation_date = map(lambda ds: ds.strftime('%Y-%m-%d'),
                     [datetime.fromisoformat(loaded["date"][-1]) + timedelta(days=delta)
@@ -125,7 +125,7 @@ for region_name in regions_to_consider:
             # add row to csv data
             add_row(loaded, count, perc, inhabitants[region_name], date)
         changed = True
-    elif loaded["vcc"][-1] != today_count or loaded["perc_doses"][-1] != perc_of_doses:
+    elif loaded["sum_doses"][-1] != today_count or loaded["perc_doses"][-1] != perc_of_doses:
         # if we started the script for a second time this day, substitute last line with new data
         print("{}: subsitute today with updated calculations".format(region_name))
         subst_last_row(loaded, today_count, perc_of_doses, inhabitants[region_name], today)
