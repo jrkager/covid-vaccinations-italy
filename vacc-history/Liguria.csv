@@ -1,4 +1,4 @@
-d,vcc,sum_1d,sum_monotone_1d,sum_2d,sum_monotone_2d,perc_doses,perc_inh_1d,perc_inh_monotone_1d,perc_inh_2d,perc_inh_monotone_2d,date
+delta_1d,sum_doses,sum_1d,sum_monotone_1d,sum_2d,sum_monotone_2d,perc_doses,perc_inh_1d,perc_inh_monotone_1d,perc_inh_2d,perc_inh_monotone_2d,date
 0,0,0,0,0,0,0,0,0,0,0,2020-12-26
 1136,1136,1136,1136,0,0,0.5580291373383532,0.0007450030364120234,0.0007450030364120234,0.0,0.0,2020-12-27
 1136,2272,2272,2272,0,0,0.5580291373383532,0.0014900060728240468,0.0014900060728240468,0.0,0.0,2020-12-28
