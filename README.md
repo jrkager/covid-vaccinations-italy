@@ -33,3 +33,4 @@ List(Dict("date":date as string "%y-%m-%d",
 Run `sh install-updater.sh`. It pulls from remote and then installs a cronjob to run `sh loadvacc.sh` every 30 minutes.
 
 `loadvacc.sh` itself runs `python update-history.py` and adds, commits and pushes the modifications to remote if any file was changed.
+
