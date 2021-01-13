@@ -4,8 +4,8 @@ Tracks vaccinations data region by region for Italy and calculates approximate n
 A `{regionname}.csv` lists data day-by-day. If the script is started multiple times a day, the last line is always subsituted by the newest data. That is, each line shows the data for that day at the time of the last run of the script on that day. (started logging on 2021-01-10. Data before that day was linearly interpolated)
 The columns are:
 
-- **d**: first doses given on a specific day (difference sum until today - sum until yesterday - first doses given 21 days ago)
-- **vcc**: total vaccinations given until now
+- **delta_1d**: number of first-doses given on a specific day (difference sum until today - sum until yesterday - first doses given 21 days ago)
+- **sum_doses**: total vaccinations given until now (counted in doses)
 - **sum_1d**: total first dose vaccinations until now (could sink temporarily since we just approximate by subsituting the number of first doses 21 days ago)
 - **sum_monotone_1d**: like sum_1d but never dropping (i.e. the maximum of all past sum_1d values)
 - **sum_2d**: total people with first and second dose vaccinations until now (i.e. vaccinated as prescribed)
@@ -33,4 +33,3 @@ List(Dict("date":date as string "%y-%m-%d",
 Run `sh install-updater.sh`. It pulls from remote and then installs a cronjob to run `sh loadvacc.sh` every 30 minutes.
 
 `loadvacc.sh` itself runs `python update-history.py` and adds, commits and pushes the modifications to remote if any file was changed.
-
