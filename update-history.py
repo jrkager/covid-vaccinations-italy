@@ -8,9 +8,13 @@ import importlib
 
 scraper = importlib.import_module("data-scraper")
 
+def round_perc(p):
+    acc = 1e5
+    return round(acc * p) / acc
+
 def subst_last_row(loaded, vacc_count, perc_of_doses, inhabitants, today):
     loaded["sum_doses"][-1] = vacc_count
-    loaded["perc_doses"][-1] = perc_of_doses
+    loaded["perc_doses"][-1] = round_perc(perc_of_doses)
     loaded["date"][-1] = today
     calc(loaded, inhabitants)
 
@@ -35,10 +39,10 @@ def calc(data, inhabitants):
     data["sum_monotone_2d"][heute] = max([data["sum_2d"][heute],
                                         data["sum_monotone_2d"][heute - 1]])
     if inhabitants > 0:
-        data["perc_inh_1d"][heute] = data["sum_1d"][heute] / inhabitants
-        data["perc_inh_monotone_1d"][heute] = data["sum_monotone_1d"][heute] / inhabitants
-        data["perc_inh_2d"][heute] = data["sum_2d"][heute] / inhabitants
-        data["perc_inh_monotone_2d"][heute] = data["sum_monotone_2d"][heute] / inhabitants
+        data["perc_inh_1d"][heute] = round_perc(100 * data["sum_1d"][heute] / inhabitants)
+        data["perc_inh_monotone_1d"][heute] = round_perc(100 * data["sum_monotone_1d"][heute] / inhabitants)
+        data["perc_inh_2d"][heute] = round_perc(100 * data["sum_2d"][heute] / inhabitants)
+        data["perc_inh_monotone_2d"][heute] = round_perc(100 * data["sum_monotone_2d"][heute] / inhabitants)
 
 def load_csv(filename):
     with open(filename, 'r') as f:
@@ -102,7 +106,7 @@ for region_name in regions_to_consider:
     loaded = load_csv(savefile_calc)
 
     today_count = regjs[region_name][0]
-    perc_of_doses = regjs[region_name][1]
+    perc_of_doses = 100 * regjs[region_name][1]
     # print("Today counter {}: {}".format(region_name,today_count))
 
     # -- update calculations for specific region --
@@ -125,7 +129,7 @@ for region_name in regions_to_consider:
             # add row to csv data
             add_row(loaded, count, perc, inhabitants[region_name], date)
         changed = True
-    elif loaded["sum_doses"][-1] != today_count or loaded["perc_doses"][-1] != perc_of_doses:
+    elif loaded["sum_doses"][-1] != today_count or loaded["perc_doses"][-1] != round_perc(perc_of_doses):
         # if we started the script for a second time this day, substitute last line with new data
         print("{}: subsitute today with updated calculations".format(region_name))
         subst_last_row(loaded, today_count, perc_of_doses, inhabitants[region_name], today)
@@ -149,13 +153,15 @@ try:
         cont=json.loads(f.read())
         latest_date = cont[-1]["date"]
 except:
+    print("Creating new region-history json list")
     cont = []
 
 # only if something changed
 regjs = {k : list(v) if isinstance(v, tuple) else v for k, v in regjs.items()}
 # get only the first 3 values (the fourth is calculated locally)
-tempcont = {k : v[0:3] for k,v in cont[-1]["regions"].items()}
-if tempcont != regjs: # compare dicts in keys and vals
+if len(cont) > 0:
+    tempcont = {k : v[0:3] for k,v in cont[-1]["regions"].items()}
+if len(cont) == 0 or tempcont != regjs: # compare dicts in keys and vals
     if today == latest_date:
         print("Substitute last day in regions-history")
         del cont[-1]
