@@ -1,7 +1,7 @@
 Tracks vaccinations data region by region for Italy and calculates approximate numbers of total of first doses and total of second doses given (assuming a 21 days intervall between two doses). The data is taken from https://app.powerbi.com/view?r=eyJrIjoiMzg4YmI5NDQtZDM5ZC00ZTIyLTgxN2MtOTBkMWM4MTUyYTg0IiwidCI6ImFmZDBhNzVjLTg2NzEtNGNjZS05MDYxLTJjYTBkOTJlNDIyZiIsImMiOjh9, which only supplies the latest number of vaccinations given in total and vaccines shipped to region in total.
 
 ## {regionname}.csv
-A `{regionname}.csv` lists data day-by-day. If the script is started multiple times a day, the last line is always subsituted by the newest data. That is, each line shows the data for that day at the time of the last run of the script on that day. (started logging on 2021-01-10. Data before that day was linearly interpolated)
+A `vacc-history/{regionname}.csv` lists data day-by-day. If the script is started multiple times a day, the last line is always subsituted by the newest data. That is, each line shows the data for that day at the time of the last run of the script on that day. (started logging on 2021-01-10. Data before that day was linearly interpolated)
 The columns are:
 
 - **delta_1d**: number of first-doses given on a specific day (difference sum until today - sum until yesterday - first doses given 21 days ago)
