@@ -25,24 +25,24 @@ def add_row(loaded, *args, **kvargs):
 
 def calc(data, inhabitants):
     intervall=21
-    heute = len(data["sum_doses"]) - 1
-    if heute == 0:
+    tday = len(data["sum_doses"]) - 1
+    if tday == 0:
         return
-    if heute < intervall + 1:
-        data["delta_1d"][heute] = data["sum_doses"][heute]-data["sum_doses"][heute-1]
+    if tday < intervall + 1:
+        data["delta_1d"][tday] = data["sum_doses"][tday]-data["sum_doses"][tday-1]
     else:
-        data["delta_1d"][heute] = data["sum_doses"][heute]-data["sum_doses"][heute-1]-data["delta_1d"][heute-intervall]
-    data["sum_1d"][heute] = data["delta_1d"][heute] + data["sum_1d"][heute-1]
-    data["sum_monotone_1d"][heute] = max([data["sum_1d"][heute],
-                                        data["sum_monotone_1d"][heute - 1]])
-    data["sum_2d"][heute] = data["sum_doses"][heute]-data["sum_doses"][heute-1]-data["delta_1d"][heute]
-    data["sum_monotone_2d"][heute] = max([data["sum_2d"][heute],
-                                        data["sum_monotone_2d"][heute - 1]])
+        data["delta_1d"][tday] = data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d"][tday-intervall]
+    data["sum_1d"][tday] = data["delta_1d"][tday] + data["sum_1d"][tday-1]
+    data["sum_monotone_1d"][tday] = max([data["sum_1d"][tday],
+                                        data["sum_monotone_1d"][tday - 1]])
+    data["sum_2d"][tday] = data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d"][tday]
+    data["sum_monotone_2d"][tday] = max([data["sum_2d"][tday],
+                                        data["sum_monotone_2d"][tday - 1]])
     if inhabitants > 0:
-        data["perc_inh_1d"][heute] = round_perc(100 * data["sum_1d"][heute] / inhabitants)
-        data["perc_inh_monotone_1d"][heute] = round_perc(100 * data["sum_monotone_1d"][heute] / inhabitants)
-        data["perc_inh_2d"][heute] = round_perc(100 * data["sum_2d"][heute] / inhabitants)
-        data["perc_inh_monotone_2d"][heute] = round_perc(100 * data["sum_monotone_2d"][heute] / inhabitants)
+        data["perc_inh_1d"][tday] = round_perc(100 * data["sum_1d"][tday] / inhabitants)
+        data["perc_inh_monotone_1d"][tday] = round_perc(100 * data["sum_monotone_1d"][tday] / inhabitants)
+        data["perc_inh_2d"][tday] = round_perc(100 * data["sum_2d"][tday] / inhabitants)
+        data["perc_inh_monotone_2d"][tday] = round_perc(100 * data["sum_monotone_2d"][tday] / inhabitants)
 
 def load_csv(filename):
     with open(filename, 'r') as f:
