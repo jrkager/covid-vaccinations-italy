@@ -35,7 +35,7 @@ def calc(data, inhabitants):
     data["sum_1d"][tday] = data["delta_1d"][tday] + data["sum_1d"][tday-1]
     data["sum_monotone_1d"][tday] = max([data["sum_1d"][tday],
                                         data["sum_monotone_1d"][tday - 1]])
-    data["sum_2d"][tday] = data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d"][tday]
+    data["sum_2d"][tday] = data["sum_2d"][tday-1]+data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d"][tday]
     data["sum_monotone_2d"][tday] = max([data["sum_2d"][tday],
                                         data["sum_monotone_2d"][tday - 1]])
     if inhabitants > 0:
