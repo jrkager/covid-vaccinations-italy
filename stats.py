@@ -42,6 +42,10 @@ savefile_all = "vacc-history/regioni-history.json"
 with open(savefile_all, "r") as f:
 	cont=json.load(f)
 
+savefile_names = "region-names.json"
+with open(savefile_names, "r") as f:
+	regnames=json.load(f)
+
 data = cont[-1]["regions"].items()
 
 sortdata = sorted(data, key = lambda s: [order[act] * actions[act](s[1]) for act in args.actions])
@@ -53,7 +57,7 @@ space=11
 print(f" {'':2}  {'reg':>21} " + "".join([f"{name[r]:>{space+1}}" for r in args.actions]))
 for i, (reg, *rates) in enumerate(sortdata):
 	l = [f"{r*100: {space}.2f}%" for r in rates]
-	print(f" {i+1:2}) {reg:>21}:" + "".join(l))
+	print(f" {i+1:2}) {regnames[reg]:>21}:" + "".join(l))
 print()
 
 if input("Proceed with plot? (y,[n]) ") == "y":
