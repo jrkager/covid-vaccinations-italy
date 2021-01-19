@@ -63,7 +63,7 @@ def load_csv(filename):
         return columns
 
 savefile_all = "vacc-history/regioni-history.json"
-regions_to_consider = ["all"]
+regions_to_consider = ["all"] # or, e.g., ["PAB", "TOS"]
 savefiles_calc_base = "vacc-history"
 inhabitants_file = "popolazione.json"
 
@@ -81,6 +81,7 @@ print()
 regjs = scraper.get_region_json()
 if "all" in regions_to_consider:
     regions_to_consider = list(regjs.keys())
+regnames = scraper.get_region_names()
 
 # -- load population numbers --
 try:
@@ -92,11 +93,12 @@ except:
 
 # -- check specific region --
 regions_changed = False
-for region_name in regions_to_consider:
+for reg_short in regions_to_consider:
+    reg_long = regnames[reg_short]
     changed = False
-    savefile_calc = os.path.join(savefiles_calc_base, region_name + ".csv")
+    savefile_calc = os.path.join(savefiles_calc_base, reg_long + ".csv")
     if not os.path.exists(savefile_calc):
-        print("Creating new table for " + region_name + "...")
+        print("Creating new table for " + reg_long + "...")
         with open(savefile_calc,"w") as f:
             f.write(",".join(header) + "\n")
             day_before_start = (datetime.fromisoformat(date_vaccination_start) -
@@ -105,9 +107,9 @@ for region_name in regions_to_consider:
         changed = True
     loaded = load_csv(savefile_calc)
 
-    today_count = regjs[region_name][0]
-    perc_of_doses = 100 * regjs[region_name][1]
-    # print("Today counter {}: {}".format(region_name,today_count))
+    today_count = regjs[reg_short][0]
+    perc_of_doses = 100 * regjs[reg_short][1]
+    # print("Today counter {}: {}".format(reg_short,today_count))
 
     # -- update calculations for specific region --
     # if not enough rows, fill with interpolation from the last inserted day up to today
@@ -116,7 +118,7 @@ for region_name in regions_to_consider:
     days_of_vacc = diff + 1
     missing_days = days_of_vacc - (len(loaded["sum_doses"]) - 1)
     if missing_days > 0:
-        print("{}: add values for {} day(s)".format(region_name, missing_days))
+        print("{}: add values for {} day(s)".format(reg_short, missing_days))
         interpolation_count = map(int,
                          np.linspace(loaded["sum_doses"][-1], today_count, missing_days+1)[1:])
         interpolation_perc = [perc_of_doses] * missing_days
@@ -127,12 +129,12 @@ for region_name in regions_to_consider:
                                      interpolation_perc,
                                      interpolation_date):
             # add row to csv data
-            add_row(loaded, count, perc, inhabitants[region_name], date)
+            add_row(loaded, count, perc, inhabitants[reg_short], date)
         changed = True
     elif loaded["sum_doses"][-1] != today_count or loaded["perc_doses"][-1] != round_perc(perc_of_doses):
         # if we started the script for a second time this day, substitute last line with new data
-        print("{}: subsitute today with updated calculations".format(region_name))
-        subst_last_row(loaded, today_count, perc_of_doses, inhabitants[region_name], today)
+        print("{}: subsitute today with updated calculations".format(reg_long))
+        subst_last_row(loaded, today_count, perc_of_doses, inhabitants[reg_short], today)
         changed = True
     if changed:
         regions_changed = True
@@ -150,7 +152,7 @@ print()
 latest_date = None
 try:
     with open(savefile_all, "r") as f:
-        cont=json.loads(f.read())
+        cont=json.load(f)
         latest_date = cont[-1]["date"]
 except:
     print("Creating new region-history json list")
@@ -173,9 +175,9 @@ if len(cont) == 0 or tempcont != regjs: # compare dicts in keys and vals
             rv.append(-1)
         else:
             rv.append(rv[0] / inhabitants[rn])
-    regjs = {"date" : today,
+    newday = {"date" : today,
              "regions" : regjs}
-    cont.append(regjs)
+    cont.append(newday)
     with open(savefile_all, "w") as f:
         json.dump(cont, f, indent=4)
 else:
