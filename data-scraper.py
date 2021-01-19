@@ -14,7 +14,7 @@ def get_region_json():
 
     # shortname-region : (doses used, ratio of available doses that were used, available doses)
     d = {e["area"] :
-         (e["dosi_somministrate"], e["percentuale_somministrazione"], e["dosi_consegnate"])
+         (e["dosi_somministrate"], e["percentuale_somministrazione"] / 100, e["dosi_consegnate"])
          for e in regions}
 
     return d
