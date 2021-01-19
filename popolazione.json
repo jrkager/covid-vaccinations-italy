@@ -1,1 +1,23 @@
-{"Piemonte": 4311217, "Valle d'Aosta": 125034, "Lombardia": 10027602, "P.A. Trento": 544630, "P.A. Bolzano": 533439, "Veneto": 4879133, "Friuli-Venezia Giulia": 1206216, "Liguria": 1524826, "Emilia-Romagna": 4464119, "Toscana": 3692555, "Umbria": 870165, "Marche": 1512672, "Lazio": 5755700, "Abruzzo": 1293941, "Molise": 300516, "Campania": 5712143, "Puglia": 3953305, "Basilicata": 553254, "Calabria": 1894110, "Sicilia": 4875290, "Sardegna": 1611621}
+{
+    "Piemonte": 4311217,
+    "Valle d'Aosta": 125034,
+    "Lombardia": 10027602,
+    "P.A. Trento": 544630,
+    "P.A. Bolzano": 533439,
+    "Veneto": 4879133,
+    "Friuli-Venezia Giulia": 1206216,
+    "Liguria": 1524826,
+    "Emilia-Romagna": 4464119,
+    "Toscana": 3692555,
+    "Umbria": 870165,
+    "Marche": 1512672,
+    "Lazio": 5755700,
+    "Abruzzo": 1293941,
+    "Molise": 300516,
+    "Campania": 5712143,
+    "Puglia": 3953305,
+    "Basilicata": 553254,
+    "Calabria": 1894110,
+    "Sicilia": 4875290,
+    "Sardegna": 1611621
+}
