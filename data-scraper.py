@@ -24,14 +24,23 @@ def get_region_names():
     with open("region-names.json") as f:
         return json.load(f)
 
-def get_by_doses(untildate=None):
-    url = "https://github.com/italia/covid19-opendata-vaccini/raw/master/dati/somministrazioni-vaccini-summary-latest.csv"
-    c = pd.read_csv(url)
+def get_by_doses(untildate=None, cache=False):
+    global somm_data_cache
+    if "somm_data_cache" in globals():
+        c, d = somm_data_cache
+    if not cache or not "somm_data_cache" in globals():
+        url = "https://github.com/italia/covid19-opendata-vaccini/raw/master/dati/somministrazioni-vaccini-summary-latest.csv"
+        c = pd.read_csv(url)
+        url = "https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv"
+        d = pd.read_csv(url)
+    if cache:
+        somm_data_cache = c, d
     if untildate:
         c = c[c.data_somministrazione <= untildate]
-    doses =  c.groupby(c.area) \
-                .sum()[["prima_dose","seconda_dose"]] \
-                .transpose() \
-                .to_dict(orient='list')
-    # shortname-region : (first doses given, second doses given)
-    return doses
+        d = d[d.data_consegna <= untildate]
+    cm = c.groupby(c.area) \
+                .sum()[["prima_dose","seconda_dose","totale"]]
+    dm = d.numero_dosi.groupby(d.area).sum()
+    # shortname-region : {first doses given, second doses given, ..}
+    merged = cm.merge(dm,how='outer',on='area').fillna(0).astype(int)
+    return merged.transpose().to_dict()
