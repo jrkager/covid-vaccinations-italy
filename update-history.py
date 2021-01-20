@@ -18,6 +18,7 @@ def subst_last_row(loaded, vacc_count, d1, d2, perc_of_doses, inhabitants, today
     loaded["sum_2d"][-1] = d2
     loaded["delta_1d"][-1] = loaded["sum_1d"][-1]-loaded["sum_1d"][-2]
     loaded["delta_2d"][-1] = loaded["sum_2d"][-1]-loaded["sum_2d"][-2]
+    loaded["delta_all"][-1] = loaded["sum_doses"][-1]-loaded["sum_doses"][-2]
     loaded["perc_doses"][-1] = round_perc(perc_of_doses)
     loaded["date"][-1] = today
     calc(loaded, inhabitants)
@@ -151,7 +152,7 @@ for reg_short in regions_to_consider:
         print("{}: subsitute today with updated calculations".format(reg_long))
         subst_last_row(loaded, today_count, d1_count, d2_count, perc_of_doses, inhabitants[reg_short], today)
         changed = True
-        
+
     if changed:
         regions_changed = True
         with open(savefile_calc, "w") as f:
