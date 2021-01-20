@@ -12,8 +12,10 @@ def round_perc(p):
     acc = 1e5
     return round(acc * p) / acc
 
-def subst_last_row(loaded, vacc_count, perc_of_doses, inhabitants, today):
+def subst_last_row(loaded, vacc_count, d1, d2, perc_of_doses, inhabitants, today):
     loaded["sum_doses"][-1] = vacc_count
+    loaded["sum_1d"][-1] = d1
+    loaded["sum_2d"][-1] = d2
     loaded["perc_doses"][-1] = round_perc(perc_of_doses)
     loaded["date"][-1] = today
     calc(loaded, inhabitants)
@@ -32,17 +34,17 @@ def calc(data, inhabitants):
         data["delta_1d"][tday] = data["sum_doses"][tday]-data["sum_doses"][tday-1]
     else:
         data["delta_1d"][tday] = data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d"][tday-intervall]
-    data["sum_1d"][tday] = data["delta_1d"][tday] + data["sum_1d"][tday-1]
-    data["sum_monotone_1d"][tday] = max([data["sum_1d"][tday],
-                                        data["sum_monotone_1d"][tday - 1]])
-    data["sum_2d"][tday] = data["sum_2d"][tday-1]+data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d"][tday]
-    data["sum_monotone_2d"][tday] = max([data["sum_2d"][tday],
-                                        data["sum_monotone_2d"][tday - 1]])
+    data["sum_1d_pred"][tday] = data["delta_1d"][tday] + data["sum_1d_pred"][tday-1]
+    data["sum_2d_pred"][tday] = data["sum_2d_pred"][tday-1]+data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d"][tday]
+
     if inhabitants > 0:
         data["perc_inh_1d"][tday] = round_perc(100 * data["sum_1d"][tday] / inhabitants)
-        data["perc_inh_monotone_1d"][tday] = round_perc(100 * data["sum_monotone_1d"][tday] / inhabitants)
         data["perc_inh_2d"][tday] = round_perc(100 * data["sum_2d"][tday] / inhabitants)
-        data["perc_inh_monotone_2d"][tday] = round_perc(100 * data["sum_monotone_2d"][tday] / inhabitants)
+
+    data["sum_monotone_1d"][tday] = data["sum_1d"][tday]
+    data["sum_monotone_2d"][tday] = data["sum_2d"][tday]
+    data["perc_inh_monotone_1d"][tday] = data["perc_inh_1d"][tday]
+    data["perc_inh_monotone_2d"][tday] = data["perc_inh_2d"][tday]
 
 def load_csv(filename):
     with open(filename, 'r') as f:
@@ -69,8 +71,11 @@ inhabitants_file = "popolazione.json"
 
 date_vaccination_start = "2020-12-27"
 
-header = ["delta_1d","sum_doses","sum_1d","sum_monotone_1d","sum_2d","sum_monotone_2d","perc_doses",
+oldheader = ["delta_1d","sum_doses","sum_1d","sum_monotone_1d","sum_2d","sum_monotone_2d","perc_doses",
     "perc_inh_1d", "perc_inh_monotone_1d", "perc_inh_2d", "perc_inh_monotone_2d", "date"]
+header = ["delta_1d","sum_doses","sum_1d","sum_2d","sum_1d_pred","sum_2d_pred","perc_doses",
+    "perc_inh_1d", "perc_inh_2d","sum_monotone_1d","sum_monotone_2d",
+    "perc_inh_monotone_1d", "perc_inh_monotone_2d", "date"]
 
 # -- get new data --
 timestamp = datetime.today()
@@ -82,6 +87,7 @@ regjs = scraper.get_region_json()
 if "all" in regions_to_consider:
     regions_to_consider = list(regjs.keys())
 regnames = scraper.get_region_names()
+dose_numbers = scraper.get_by_doses()
 
 # -- load population numbers --
 try:
@@ -107,7 +113,26 @@ for reg_short in regions_to_consider:
         changed = True
     loaded = load_csv(savefile_calc)
 
+    # loaded["sum_1d_pred"] = loaded["sum_1d"].copy()
+    # loaded["sum_2d_pred"] = loaded["sum_2d"].copy()
+    # for i in range(1,len(loaded["sum_1d"])):
+    #     if not loaded["date"][i] in dose_numbers:
+    #         dose_numbers[loaded["date"][i]] = scraper.get_by_doses(loaded["date"][i])
+    #     ds = dose_numbers[loaded["date"][i]][reg_short]
+    #     loaded["sum_1d"][i] = ds[0]
+    #     loaded["sum_2d"][i] = ds[1]
+    #     loaded["perc_inh_1d"][i] = round_perc(100 * loaded["sum_1d"][i] / inhabitants[reg_short])
+    #     loaded["perc_inh_2d"][i] = round_perc(100 * loaded["sum_2d"][i] / inhabitants[reg_short])
+    # loaded["sum_monotone_1d"] = loaded["sum_1d"].copy()
+    # loaded["sum_monotone_2d"] = loaded["sum_2d"].copy()
+    # loaded["perc_inh_monotone_1d"] = loaded["perc_inh_1d"].copy()
+    # loaded["perc_inh_monotone_2d"] = loaded["perc_inh_2d"].copy()
+    # changed = True
+
+
     today_count = regjs[reg_short][0]
+    d1_count = dose_numbers[reg_short][0]
+    d2_count = dose_numbers[reg_short][1]
     perc_of_doses = 100 * regjs[reg_short][1]
     # print("Today counter {}: {}".format(reg_short,today_count))
 
@@ -121,20 +146,24 @@ for reg_short in regions_to_consider:
         print("{}: add values for {} day(s)".format(reg_short, missing_days))
         interpolation_count = map(int,
                          np.linspace(loaded["sum_doses"][-1], today_count, missing_days+1)[1:])
+        interpolation_1d = map(int,
+                      np.linspace(loaded["sum_1d"][-1], d1_count, missing_days+1)[1:])
+        interpolation_2d = map(int,
+                      np.linspace(loaded["sum_2d"][-1], d2_count, missing_days+1)[1:])
         interpolation_perc = [perc_of_doses] * missing_days
         interpolation_date = map(lambda ds: ds.strftime('%Y-%m-%d'),
                     [datetime.fromisoformat(loaded["date"][-1]) + timedelta(days=delta)
                           for delta in range(0, missing_days+1)][1:])
-        for count, perc, date in zip(interpolation_count,
+        for count, d1, d2, perc, date in zip(interpolation_count,interpolation_1d,interpolation_2d,
                                      interpolation_perc,
                                      interpolation_date):
             # add row to csv data
-            add_row(loaded, count, perc, inhabitants[reg_short], date)
+            add_row(loaded, count, d1, d2, perc, inhabitants[reg_short], date)
         changed = True
     elif loaded["sum_doses"][-1] != today_count or loaded["perc_doses"][-1] != round_perc(perc_of_doses):
         # if we started the script for a second time this day, substitute last line with new data
         print("{}: subsitute today with updated calculations".format(reg_long))
-        subst_last_row(loaded, today_count, perc_of_doses, inhabitants[reg_short], today)
+        subst_last_row(loaded, today_count, d1_count, d2_count, perc_of_doses, inhabitants[reg_short], today)
         changed = True
     if changed:
         regions_changed = True
