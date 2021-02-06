@@ -1,7 +1,7 @@
 Tracks vaccinations data region by region for Italy and calculates approximate numbers of total of first doses and total of second doses given (assuming a 21 days intervall between two doses). The data is taken from https://github.com/italia/covid19-opendata-vaccini. In the meanwhile the fields prima_dose, seconda_dose were added to the source repo, so the approximation algorithm is still here just for fun.
 
 ## {regionname}.csv
-A `vacc-history/{regionname}.csv` lists data day-by-day. If the script is started multiple times a day, the last line is always subsituted by the newest data. That is, each line shows the data for that day at the time of the last run of the script on that day. (started logging on 2021-01-10. Data before that day was linearly interpolated)
+A `vacc-history/{regionname}.csv` lists data day-by-day. If the script is started multiple times a day, the last line is always subsituted by the newest data. That is, each line shows the data for that day at the time of the last run of the script on that day.
 The columns are:
 
 - **delta_1d**: number of first-doses given on a specific day
