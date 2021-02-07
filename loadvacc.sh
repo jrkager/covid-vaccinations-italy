@@ -3,7 +3,7 @@
 # make sure you cd to the repo first
 git pull > /dev/null
 
-pip install --user "pandas>=1.0.0"
+pip3 install --user "pandas>=1.0.0"
 
 python update-history.py
 
