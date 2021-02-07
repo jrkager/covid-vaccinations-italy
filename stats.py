@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib import dates as mdates
 from datetime import datetime
 import pandas as pd
+import re
 
 parser = argparse.ArgumentParser()
 parser.add_argument('actions', metavar='action', type=str, nargs='*',
@@ -15,8 +16,8 @@ parser.add_argument('actions', metavar='action', type=str, nargs='*',
 
 args = parser.parse_args()
 
-actions = { "vacc" : # n vaccines in percentage to total population
-                lambda vals: vals.perc_inh_tot,
+actions = { "vacc" : # n/2 vaccines in percentage to total population
+                lambda vals: vals.perc_inh_tot/2,
             "suppl" : # this ratio of population could get vaccined (2 doses) with current supply
                 lambda vals: 100 * vals.perc_inh_tot / vals.perc_doses / 2,
             "used" : # doses used out of supplied ones
@@ -64,7 +65,7 @@ if "all" in args.actions:
     args.actions.extend(k for k in ["vacc1", "vacc2", "used", "suppl", "period"] if k not in args.actions)
 args.actions = [k for k in args.actions if k in actions]
 if not args.actions:
-    args.actions = ["vacc2", "vacc", "used", "period"]
+    args.actions = ["vacc2", "vacc1", "used", "period"]
 
 cont = {}
 savefile_path = "vacc-history/"
@@ -93,37 +94,45 @@ for i, (reg, *rates) in enumerate(sortdata):
 print()
 
 if input("Proceed with plot? (y,[n]) ") == "y":
-    regfiles = []
-    for f in os.listdir("vacc-history/"):
-        if f.endswith(".csv"):
-            regfiles.append(f)
-    regfiles = sorted(regfiles)
-    print("Choose region:")
-    for i, f in enumerate(regfiles):
-        print(f"{i+1:>2}: {f[:f.find('.csv')]}")
-    #try:
-    if True:
-        ch = int(input("Choice: "))
-        if ch < 1 or ch > len(regfiles):
-            raise
-        data = np.genfromtxt(f"vacc-history/{regfiles[ch-1]}", delimiter=",", usecols=(3,-1), converters={17 : lambda s: datetime.strptime(s.decode("utf-8"), "%Y-%m-%d")})
-        sum_doses = [s[0] for s in data[2:]]
-        dates = [s[1] for s in data[2:]]
-        if sum_doses[-1] == sum_doses[-2]:
-            sum_doses = sum_doses[:-1]
-            dates = dates[:-1]
-
-        x = dates
-        y = sum_doses
-        locator=mdates.AutoDateLocator(minticks=1,maxticks=10)
+    df = pd.read_json(os.path.join(savefile_path,"all-regions.json"), orient="table")
+    regs = input("Choose regions (by area shortname, comma seperated): ")
+    regs = list(filter(lambda s: len(s) > 0 and df.area.str.contains(s).any(), re.split(",| ", regs.upper())))
+    fields = input("Choose fields: ")
+    fields = list(filter(lambda s: s in df.columns, re.split(",| ", fields.lower())))
+    if "any" in fields:
+        fields = ["perc_inh", "perc_doses"]
+    for field in fields:
+        fig, ax = plt.subplots(figsize=(10,7))
+        areaorder=df.groupby("area") \
+                  .apply(lambda x: x.sort_values("date").tail(1)) \
+                  .sort_values(field,ascending=False) \
+                  .area
+        if field == "perc_inh":
+            ax.set_ylabel("Impfungen / Bewohner / 2 [%]", fontsize="large")
+        elif field == "supply":
+            ax.set_ylabel("Verf. Dosen / Bewohner / 2 [%]", fontsize="large")
+        else:
+            ax.set_ylabel(a)
+        ax.set_xlabel("")
+        locator=mdates.AutoDateLocator(minticks=4,maxticks=10)
         formatter=mdates.ConciseDateFormatter(locator)
-        fig,ax=plt.subplots()
-        ax.set_ylim(bottom=0,top=max(y)*1.2)
         ax.xaxis.set_major_locator(locator)
         ax.xaxis.set_major_formatter(formatter)
-        ax.plot(x,y,'-o')
+        for a in areaorder:
+            if a not in regs:
+                continue
+            df[df.area == a].plot(x="date", y=field, ax=ax, label=a)
+        ax.legend(ncol=2, fontsize="large")
         plt.grid(True)
-        plt.title("Doses given - " + regfiles[ch-1][:regfiles[ch-1].find('.csv')])
         plt.show()
-    # except:
-    #     pass
+
+
+    attr=["sum_doses","tot_supply"]
+    for reg in regs:
+      fig, ax = plt.subplots(figsize=(10,7))
+      for a in attr:
+        df[df.area == reg].plot(x="date", y=a, ax=ax, label=a)
+      ax.set_xlabel("")
+      ax.set_title(reg)
+      plt.grid(True)
+      plt.show()
