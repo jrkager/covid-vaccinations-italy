@@ -1,9 +1,11 @@
 import requests
 import json
 import os, sys
+import argparse
 from datetime import datetime, timedelta
 import csv
 import numpy as np
+import pandas as pd
 import importlib
 
 scraper = importlib.import_module("data-scraper")
@@ -68,7 +70,13 @@ def load_csv(filename):
                         columns[h].append(v)
         return columns
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-f", help="Force update", action='store_true')
+args = parser.parse_args()
+
 savefile_all = "vacc-history/regioni-history.json"
+savefile_csvall = "vacc-history/all-regions.json"
 regions_to_consider = ["all"] # or, e.g., ["PAB", "TOS"]
 savefiles_calc_base = "vacc-history"
 inhabitants_file = "popolazione.json"
@@ -182,7 +190,7 @@ if not regions_changed:
     print("None of the considered regions was updated.")
 print()
 
-# -- update all-regions-stats file --
+# -- update all-regions-stats files --
 latest_date = None
 try:
     with open(savefile_all, "r") as f:
@@ -197,7 +205,7 @@ regjs = {k : list(v) if isinstance(v, tuple) else v for k, v in regjs.items()}
 # get only the first 3 values (the fourth is calculated locally)
 if len(cont) > 0:
     tempcont = {k : v[0:3] for k,v in cont[-1]["regions"].items()}
-if len(cont) == 0 or tempcont != regjs: # compare dicts in keys and vals
+if len(cont) == 0 or tempcont != regjs or args.f: # compare dicts in keys and vals
     if today == latest_date:
         print("Substitute last day in regions-history")
         del cont[-1]
@@ -214,6 +222,24 @@ if len(cont) == 0 or tempcont != regjs: # compare dicts in keys and vals
     cont.append(newday)
     with open(savefile_all, "w") as f:
         json.dump(cont, f, indent=4)
+
+    # update all-regions json (unition of all csv files)
+    fcs = []
+    for f in os.listdir(savefiles_calc_base):
+        if f.endswith(".csv"):
+            reg_long = os.path.splitext(os.path.basename(f))[0]
+            reg_short = [k for k,v in regnames.items() if v == reg_long][0]
+            fc = pd.read_csv(os.path.join(savefiles_calc_base, f))
+            fc.insert(0, "area", reg_short)
+            fcs.append(fc)
+    df = pd.concat(fcs)[1:]
+    df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d')
+    df["perc_inh"]=df["perc_inh_tot"]/2
+    df["perc_supply"]=100*df.perc_inh_tot/df.perc_doses/2
+    df["tot_supply"]=df.sum_doses/df.perc_doses*100
+    df.reset_index(drop=True, inplace=True)
+    df.to_json(savefile_csvall, orient="table", indent=2)
+    print("Collected all csv files into json.")
 else:
     print("regions-history was already up-to-date.")
 
