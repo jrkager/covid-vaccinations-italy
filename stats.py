@@ -126,13 +126,13 @@ if input("Proceed with plot? (y,[n]) ") == "y":
         plt.grid(True)
         plt.show()
 
-
-    attr=["sum_doses","tot_supply"]
-    for reg in regs:
-      fig, ax = plt.subplots(figsize=(10,7))
-      for a in attr:
-        df[df.area == reg].plot(x="date", y=a, ax=ax, label=a)
-      ax.set_xlabel("")
-      ax.set_title(reg)
-      plt.grid(True)
-      plt.show()
+    if input("Plot doses and supply for each region? (y,[n]) ") == y:
+        attr=["sum_doses","tot_supply"]
+        for reg in regs:
+          fig, ax = plt.subplots(figsize=(10,7))
+          for a in attr:
+            df[df.area == reg].plot(x="date", y=a, ax=ax, label=a)
+          ax.set_xlabel("")
+          ax.set_title(reg)
+          plt.grid(True)
+          plt.show()
