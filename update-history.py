@@ -73,6 +73,9 @@ def load_csv(filename):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-f", help="Force update", action='store_true')
+parser.add_argument("--reset", "-r", help="Reset total history of csv \
+                            files to data in repo. (useful when data wasn't \
+                            updated for some days)", action='store_true')
 args = parser.parse_args()
 
 savefile_all = "vacc-history/regioni-history.json"
@@ -87,9 +90,6 @@ header = ["delta_1d","delta_2d","delta_all","sum_doses","sum_1d","sum_2d","delta
     "perc_inh_tot","perc_inh_1d", "perc_inh_2d","sum_monotone_1d","sum_monotone_2d",
     "perc_inh_monotone_1d", "perc_inh_monotone_2d", "date"]
 
-reset = False
-if len(sys.argv) > 1 and sys.argv[1] == "reset":
-    reset = True
 
 # -- get new data --
 timestamp = datetime.today()
@@ -117,7 +117,7 @@ for reg_short in regions_to_consider:
     reg_long = regnames[reg_short]
     changed = False
     savefile_calc = os.path.join(savefiles_calc_base, reg_long + ".csv")
-    if reset or not os.path.exists(savefile_calc):
+    if args.reset or not os.path.exists(savefile_calc):
         print("Creating new table for " + reg_long + "...")
         with open(savefile_calc,"w") as f:
             f.write(",".join(header) + "\n")
@@ -131,18 +131,18 @@ for reg_short in regions_to_consider:
     days_of_vacc = diff + 1
     missing_days = days_of_vacc - (len(loaded["sum_doses"]) - 1)
 
-    if reset:
-        interpolation_date = map(lambda ds: ds.strftime('%Y-%m-%d'),
+    if args.reset:
+        interpolation_dates = map(lambda ds: ds.strftime('%Y-%m-%d'),
                     [datetime.fromisoformat(loaded["date"][-1]) + timedelta(days=delta)
                           for delta in range(1, missing_days+1)])
-        for date in interpolation_date:
+        for date in interpolation_dates:
             d = scraper.get_by_doses(untildate=date, cache=True)
             if reg_short not in d:
                 d = {'prima_dose': 0, 'seconda_dose': 0, 'totale': 0, 'numero_dosi': 0}
             else:
                 d = d[reg_short]
             add_row(loaded, d["totale"], d["prima_dose"], d["seconda_dose"],
-                    100*d["totale"]/d["numero_dosi"], inhabitants[reg_short], date)
+                    round(1000*d["totale"]/d["numero_dosi"])/10, inhabitants[reg_short], date)
         changed = True
     else:
         today_count = regjs[reg_short][0]
@@ -205,7 +205,7 @@ regjs = {k : list(v) if isinstance(v, tuple) else v for k, v in regjs.items()}
 # get only the first 3 values (the fourth is calculated locally)
 if len(cont) > 0:
     tempcont = {k : v[0:3] for k,v in cont[-1]["regions"].items()}
-if len(cont) == 0 or tempcont != regjs or args.f: # compare dicts in keys and vals
+if len(cont) == 0 or tempcont != regjs or args.f or args.reset: # compare dicts in keys and vals
     if today == latest_date:
         print("Substitute last day in regions-history")
         del cont[-1]
