@@ -115,7 +115,7 @@ if input("Proceed with plot? (y,[n]) ") == "y":
         elif field == "supply":
             ax.set_ylabel("Verf. Dosen / Bewohner / 2 [%]", fontsize="large")
         else:
-            ax.set_ylabel(a)
+            ax.set_ylabel(field)
         ax.set_xlabel("")
         locator=mdates.AutoDateLocator(minticks=4,maxticks=10)
         formatter=mdates.ConciseDateFormatter(locator)
