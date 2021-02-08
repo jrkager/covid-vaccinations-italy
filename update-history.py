@@ -190,40 +190,8 @@ if not regions_changed:
     print("None of the considered regions was updated.")
 print()
 
-# -- update all-regions-stats files --
-latest_date = None
-try:
-    with open(savefile_all, "r") as f:
-        cont=json.load(f)
-        latest_date = cont[-1]["date"]
-except:
-    print("Creating new region-history json list")
-    cont = []
-
-# only if something changed
-regjs = {k : list(v) if isinstance(v, tuple) else v for k, v in regjs.items()}
-# get only the first 3 values (the fourth is calculated locally)
-if len(cont) > 0:
-    tempcont = {k : v[0:3] for k,v in cont[-1]["regions"].items()}
-if len(cont) == 0 or tempcont != regjs or args.f or args.reset: # compare dicts in keys and vals
-    if today == latest_date:
-        print("Substitute last day in regions-history")
-        del cont[-1]
-    else:
-        print("New day in regions-history")
-    # append value somministrazioni / abitanti
-    for rn, rv in regjs.items():
-        if inhabitants[rn] == -1:
-            rv.append(-1)
-        else:
-            rv.append(rv[0] / inhabitants[rn])
-    newday = {"date" : today,
-             "regions" : regjs}
-    cont.append(newday)
-    with open(savefile_all, "w") as f:
-        json.dump(cont, f, indent=4)
-
-    # update all-regions json (unition of all csv files)
+# -- update all-region json file (unition of all csv files) --
+if regions_changed or args.f or args.reset:
     fcs = []
     for f in os.listdir(savefiles_calc_base):
         if f.endswith(".csv"):
@@ -240,7 +208,5 @@ if len(cont) == 0 or tempcont != regjs or args.f or args.reset: # compare dicts 
     df.reset_index(drop=True, inplace=True)
     df.to_json(savefile_csvall, orient="table", indent=2)
     print("Collected all csv files into json.")
-else:
-    print("regions-history was already up-to-date.")
 
 print("-")
