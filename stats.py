@@ -96,12 +96,15 @@ print()
 if input("Proceed with plot? (y,[n]) ") == "y":
     df = pd.read_json(os.path.join(savefile_path,"all-regions.json"), orient="table")
     regs = input("Choose regions (by area shortname, comma seperated): ")
-    regs = list(filter(lambda s: len(s) > 0 and df.area.str.contains(s).any(), re.split(",| ", regs.upper())))
+    regs = list(filter(lambda s: len(s) > 0 and df.area.str.contains(s).any(),
+                        re.split(",| ", regs.upper())))
     fields = input("Choose fields: ")
-    fields = list(filter(lambda s: s in df.columns, re.split(",| ", fields.lower())))
+    fields = re.split(",| ", fields.lower())
     if "any" in fields:
         fields = ["perc_inh", "perc_doses"]
     for field in fields:
+        if field not in df.columns:
+            continue
         fig, ax = plt.subplots(figsize=(10,7))
         areaorder=df.groupby("area") \
                   .apply(lambda x: x.sort_values("date").tail(1)) \
@@ -126,7 +129,7 @@ if input("Proceed with plot? (y,[n]) ") == "y":
         plt.grid(True)
         plt.show()
 
-    if input("Plot doses and supply for each region? (y,[n]) ") == y:
+    if input("Plot doses and supply for each region? (y,[n]) ") == "y":
         attr=["sum_doses","tot_supply"]
         for reg in regs:
           fig, ax = plt.subplots(figsize=(10,7))
