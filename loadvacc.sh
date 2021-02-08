@@ -1,11 +1,9 @@
 #!/bin/bash
 
 # make sure you cd to the repo first
-git pull > /dev/null
+git pull
 
-pip3 install --user "pandas>=1.0.0"
-
-python update-history.py
+/usr/bin/python3 update-history.py
 
 if ! git diff --quiet vacc-history/
 then
