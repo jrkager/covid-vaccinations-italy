@@ -96,8 +96,9 @@ print()
 if input("Proceed with plot? (y,[n]) ") == "y":
     df = pd.read_json(os.path.join(savefile_path,"all-regions.json"), orient="table")
     regs = input("Choose regions (by area shortname, comma seperated): ")
-    regs = list(filter(lambda s: len(s) > 0 and df.area.str.contains(s).any(),
-                        re.split(",| ", regs.upper())))
+    regs = re.split(",| ", regs.upper())
+    if "ALL" in regs:
+        regs = df.area.unique().tolist()
     fields = input("Choose fields: ")
     fields = re.split(",| ", fields.lower())
     if "any" in fields:
