@@ -140,3 +140,18 @@ if input("Proceed with plot? (y,[n]) ") == "y":
           ax.set_title(reg)
           plt.grid(True)
           plt.show()
+
+    if input("Plot first and second doses for each region? (y,[n]) ") == "y":
+        attr=["sum_1d","sum_2d"]
+        df["1d_shift"] = df.groupby(df.area).sum_1d.shift(21, fill_value = 0)
+        for reg in regs:
+          fig, ax = plt.subplots(figsize=(10,7))
+          for a in attr:
+            df[df.area == reg].plot(x="date", y=a, ax=ax, label=a)
+          df[df.area == reg].plot(x="date", y="1d_shift",
+                        ax=ax, label="sum_1d shift by 21 days",
+                        color="gray")
+          ax.set_xlabel("")
+          ax.set_title(reg)
+          plt.grid(True)
+          plt.show()
