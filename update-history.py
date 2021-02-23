@@ -127,9 +127,8 @@ for reg_short in regions_to_consider:
         changed = True
     loaded = load_csv(savefile_calc)
 
-    diff = (datetime.fromisoformat(today)-datetime.fromisoformat(date_vaccination_start)).days
-    days_of_vacc = diff + 1
-    missing_days = days_of_vacc - (len(loaded["sum_doses"]) - 1)
+    missing_days = (datetime.fromisoformat(today)-datetime.fromisoformat(loaded["date"][-1])).days
+    print("Missing days:", missing_days)
 
     if args.reset:
         interpolation_dates = map(lambda ds: ds.strftime('%Y-%m-%d'),
