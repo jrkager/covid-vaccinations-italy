@@ -31,16 +31,9 @@ def add_row(loaded, *args, **kvargs):
     subst_last_row(loaded, *args, **kvargs)
 
 def calc(data, inhabitants):
-    intervall=21
     tday = len(data["sum_doses"]) - 1
     if tday == 0:
         return
-    if tday < intervall + 1:
-        data["delta_1d_pred"][tday] = data["sum_doses"][tday]-data["sum_doses"][tday-1]
-    else:
-        data["delta_1d_pred"][tday] = data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d_pred"][tday-intervall]
-    data["sum_1d_pred"][tday] = data["delta_1d_pred"][tday] + data["sum_1d_pred"][tday-1]
-    data["sum_2d_pred"][tday] = data["sum_2d_pred"][tday-1]+data["sum_doses"][tday]-data["sum_doses"][tday-1]-data["delta_1d_pred"][tday]
 
     if inhabitants > 0:
         data["perc_inh_1d"][tday] = round_perc(100 * data["sum_1d"][tday] / inhabitants)
@@ -86,7 +79,7 @@ inhabitants_file = "popolazione.json"
 
 date_vaccination_start = "2020-12-27"
 
-header = ["delta_1d","delta_2d","delta_all","sum_doses","sum_1d","sum_2d","delta_1d_pred","sum_1d_pred","sum_2d_pred","perc_doses",
+header = ["delta_1d","delta_2d","delta_all","sum_doses","sum_1d","sum_2d","perc_doses",
     "perc_inh_tot","perc_inh_1d", "perc_inh_2d","sum_monotone_1d","sum_monotone_2d",
     "perc_inh_monotone_1d", "perc_inh_monotone_2d", "date"]
 
@@ -128,7 +121,7 @@ for reg_short in regions_to_consider:
     loaded = load_csv(savefile_calc)
 
     missing_days = (datetime.fromisoformat(today)-datetime.fromisoformat(loaded["date"][-1])).days
-    print("Missing days:", missing_days)
+#     print("Missing days:", missing_days)
 
     if args.reset:
         interpolation_dates = map(lambda ds: ds.strftime('%Y-%m-%d'),
