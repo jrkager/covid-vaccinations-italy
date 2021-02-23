@@ -65,7 +65,7 @@ if "all" in args.actions:
     args.actions.extend(k for k in ["vacc1", "vacc2", "used", "suppl", "period"] if k not in args.actions)
 args.actions = [k for k in args.actions if k in actions]
 if not args.actions:
-    args.actions = ["vacc2", "vacc1", "used", "period"]
+    args.actions = ["vacc2", "vacc1", "used"]
 
 cont = {}
 savefile_path = "vacc-history/"
@@ -95,11 +95,12 @@ print()
 
 if input("Proceed with plot? (y,[n]) ") == "y":
     df = pd.read_json(os.path.join(savefile_path,"all-regions.json"), orient="table")
+    df["1d_shift"] = df.groupby(df.area).sum_1d.shift(21, fill_value = 0)
     regs = input("Choose regions (by area shortname, comma seperated): ")
     regs = re.split(",| ", regs.upper())
     if "ALL" in regs:
         regs = df.area.unique().tolist()
-    fields = input("Choose fields: ")
+    fields = input(f"Choose fields ({', '.join(df.columns)}): ")
     fields = re.split(",| ", fields.lower())
     if "any" in fields:
         fields = ["perc_inh", "perc_doses"]
@@ -143,7 +144,7 @@ if input("Proceed with plot? (y,[n]) ") == "y":
 
     if input("Plot first and second doses for each region? (y,[n]) ") == "y":
         attr=["sum_1d","sum_2d"]
-        df["1d_shift"] = df.groupby(df.area).sum_1d.shift(21, fill_value = 0)
+        
         for reg in regs:
           fig, ax = plt.subplots(figsize=(10,7))
           for a in attr:
