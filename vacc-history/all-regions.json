@@ -2121,7 +2121,7 @@
       "sum_doses":261286,
       "sum_1d":170578,
       "sum_2d":90708,
-      "perc_doses":77.5,
+      "perc_doses":75.9,
       "perc_inh_tot":17.13546,
       "perc_inh_1d":11.18672,
       "perc_inh_2d":5.94874,
@@ -2131,8 +2131,8 @@
       "perc_inh_monotone_2d":5.94874,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.56773,
-      "perc_supply":11.0551354839,
-      "tot_supply":337143.2258064516
+      "perc_supply":11.2881818182,
+      "tot_supply":344250.3293807642
     },
     {
       "index":93,
@@ -4189,7 +4189,7 @@
       "sum_doses":749986,
       "sum_1d":524581,
       "sum_2d":225405,
-      "perc_doses":89.2,
+      "perc_doses":86.9,
       "perc_inh_tot":15.38341,
       "perc_inh_1d":10.76,
       "perc_inh_2d":4.62342,
@@ -4199,8 +4199,8 @@
       "perc_inh_monotone_2d":4.62342,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":7.691705,
-      "perc_supply":8.6229876682,
-      "tot_supply":840791.4798206278
+      "perc_supply":8.8512140391,
+      "tot_supply":863044.8791714614
     },
     {
       "index":187,
@@ -6257,7 +6257,7 @@
       "sum_doses":968980,
       "sum_1d":689795,
       "sum_2d":279185,
-      "perc_doses":86.7,
+      "perc_doses":84.3,
       "perc_inh_tot":16.83514,
       "perc_inh_1d":11.98455,
       "perc_inh_2d":4.85058,
@@ -6267,8 +6267,8 @@
       "perc_inh_monotone_2d":4.85058,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.41757,
-      "perc_supply":9.7088465975,
-      "tot_supply":1117623.9907727798
+      "perc_supply":9.9852550415,
+      "tot_supply":1149442.4673784105
     },
     {
       "index":281,
@@ -8325,7 +8325,7 @@
       "sum_doses":210283,
       "sum_1d":134362,
       "sum_2d":75921,
-      "perc_doses":85.7,
+      "perc_doses":83.9,
       "perc_inh_tot":17.43328,
       "perc_inh_1d":11.13913,
       "perc_inh_2d":6.29415,
@@ -8335,8 +8335,8 @@
       "perc_inh_monotone_2d":6.29415,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.71664,
-      "perc_supply":10.1711085181,
-      "tot_supply":245371.0618436406
+      "perc_supply":10.3893206198,
+      "tot_supply":250635.2800953516
     },
     {
       "index":375,
@@ -10393,7 +10393,7 @@
       "sum_doses":572007,
       "sum_1d":395916,
       "sum_2d":176091,
-      "perc_doses":84.0,
+      "perc_doses":81.7,
       "perc_inh_tot":14.46908,
       "perc_inh_1d":10.01481,
       "perc_inh_2d":4.45427,
@@ -10403,8 +10403,8 @@
       "perc_inh_monotone_2d":4.45427,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":7.23454,
-      "perc_supply":8.612547619,
-      "tot_supply":680960.7142857143
+      "perc_supply":8.85500612,
+      "tot_supply":700130.9669522643
     },
     {
       "index":469,
@@ -12461,7 +12461,7 @@
       "sum_doses":753888,
       "sum_1d":483637,
       "sum_2d":270251,
-      "perc_doses":85.9,
+      "perc_doses":84.1,
       "perc_inh_tot":17.48666,
       "perc_inh_1d":11.21811,
       "perc_inh_2d":6.26855,
@@ -12471,8 +12471,8 @@
       "perc_inh_monotone_2d":6.26855,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.74333,
-      "perc_supply":10.1784982538,
-      "tot_supply":877634.4586728754
+      "perc_supply":10.3963495838,
+      "tot_supply":896418.5493460167
     },
     {
       "index":563,
@@ -14529,7 +14529,7 @@
       "sum_doses":806703,
       "sum_1d":527850,
       "sum_2d":278853,
-      "perc_doses":87.6,
+      "perc_doses":85.8,
       "perc_inh_tot":18.07082,
       "perc_inh_1d":11.82428,
       "perc_inh_2d":6.24654,
@@ -14539,8 +14539,8 @@
       "perc_inh_monotone_2d":6.24654,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":9.03541,
-      "perc_supply":10.3143949772,
-      "tot_supply":920893.8356164384
+      "perc_supply":10.5307808858,
+      "tot_supply":940213.2867132869
     },
     {
       "index":657,
@@ -16597,7 +16597,7 @@
       "sum_doses":59414,
       "sum_1d":40623,
       "sum_2d":18791,
-      "perc_doses":90.7,
+      "perc_doses":88.8,
       "perc_inh_tot":19.77066,
       "perc_inh_1d":13.51775,
       "perc_inh_2d":6.25291,
@@ -16607,8 +16607,8 @@
       "perc_inh_monotone_2d":6.25291,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":9.88533,
-      "perc_supply":10.8989305402,
-      "tot_supply":65506.0639470783
+      "perc_supply":11.1321283784,
+      "tot_supply":66907.6576576577
     },
     {
       "index":751,
@@ -18665,7 +18665,7 @@
       "sum_doses":83084,
       "sum_1d":51766,
       "sum_2d":31318,
-      "perc_doses":80.5,
+      "perc_doses":78.6,
       "perc_inh_tot":15.01733,
       "perc_inh_1d":9.35664,
       "perc_inh_2d":5.66069,
@@ -18675,8 +18675,8 @@
       "perc_inh_monotone_2d":5.66069,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":7.508665,
-      "perc_supply":9.3275341615,
-      "tot_supply":103209.9378881988
+      "perc_supply":9.5530089059,
+      "tot_supply":105704.834605598
     },
     {
       "index":845,
@@ -20733,7 +20733,7 @@
       "sum_doses":241902,
       "sum_1d":164081,
       "sum_2d":77821,
-      "perc_doses":76.7,
+      "perc_doses":74.7,
       "perc_inh_tot":12.77128,
       "perc_inh_1d":8.6627,
       "perc_inh_2d":4.10858,
@@ -20743,8 +20743,8 @@
       "perc_inh_monotone_2d":4.10858,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":6.38564,
-      "perc_supply":8.3254758801,
-      "tot_supply":315387.222946545
+      "perc_supply":8.5483801874,
+      "tot_supply":323831.3253012048
     },
     {
       "index":939,
@@ -22801,7 +22801,7 @@
       "sum_doses":133882,
       "sum_1d":98300,
       "sum_2d":35582,
-      "perc_doses":87.5,
+      "perc_doses":85.4,
       "perc_inh_tot":15.38582,
       "perc_inh_1d":11.29671,
       "perc_inh_2d":4.08911,
@@ -22811,8 +22811,8 @@
       "perc_inh_monotone_2d":4.08911,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":7.69291,
-      "perc_supply":8.7918971429,
-      "tot_supply":153008.0
+      "perc_supply":9.0080913349,
+      "tot_supply":156770.4918032787
     },
     {
       "index":1033,
@@ -24869,7 +24869,7 @@
       "sum_doses":100851,
       "sum_1d":67724,
       "sum_2d":33127,
-      "perc_doses":94.4,
+      "perc_doses":92.4,
       "perc_inh_tot":18.90582,
       "perc_inh_1d":12.69573,
       "perc_inh_2d":6.21008,
@@ -24879,8 +24879,8 @@
       "perc_inh_monotone_2d":6.21008,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":9.45291,
-      "perc_supply":10.0136758475,
-      "tot_supply":106833.686440678
+      "perc_supply":10.2304220779,
+      "tot_supply":109146.1038961039
     },
     {
       "index":1127,
@@ -26937,7 +26937,7 @@
       "sum_doses":247307,
       "sum_1d":157703,
       "sum_2d":89604,
-      "perc_doses":83.4,
+      "perc_doses":81.6,
       "perc_inh_tot":16.34902,
       "perc_inh_1d":10.42546,
       "perc_inh_2d":5.92356,
@@ -26947,8 +26947,8 @@
       "perc_inh_monotone_2d":5.92356,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.17451,
-      "perc_supply":9.8015707434,
-      "tot_supply":296531.175059952
+      "perc_supply":10.0177818627,
+      "tot_supply":303072.3039215687
     },
     {
       "index":1221,
@@ -29005,7 +29005,7 @@
       "sum_doses":801112,
       "sum_1d":564668,
       "sum_2d":236444,
-      "perc_doses":89.6,
+      "perc_doses":87.4,
       "perc_inh_tot":16.41915,
       "perc_inh_1d":11.57312,
       "perc_inh_2d":4.84602,
@@ -29015,8 +29015,8 @@
       "perc_inh_monotone_2d":4.84602,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.209575,
-      "perc_supply":9.1624720982,
-      "tot_supply":894098.2142857143
+      "perc_supply":9.3931064073,
+      "tot_supply":916604.1189931349
     },
     {
       "index":1315,
@@ -31073,7 +31073,7 @@
       "sum_doses":1495742,
       "sum_1d":1027192,
       "sum_2d":468550,
-      "perc_doses":84.8,
+      "perc_doses":82.7,
       "perc_inh_tot":14.91625,
       "perc_inh_1d":10.24365,
       "perc_inh_2d":4.6726,
@@ -31083,8 +31083,8 @@
       "perc_inh_monotone_2d":4.6726,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":7.458125,
-      "perc_supply":8.7949587264,
-      "tot_supply":1763846.6981132075
+      "perc_supply":9.0182889964,
+      "tot_supply":1808636.0338573155
     },
     {
       "index":1409,
@@ -33141,7 +33141,7 @@
       "sum_doses":208243,
       "sum_1d":146233,
       "sum_2d":62010,
-      "perc_doses":85.8,
+      "perc_doses":83.8,
       "perc_inh_tot":16.0937,
       "perc_inh_1d":11.30137,
       "perc_inh_2d":4.79234,
@@ -33151,8 +33151,8 @@
       "perc_inh_monotone_2d":4.79234,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.04685,
-      "perc_supply":9.3786130536,
-      "tot_supply":242707.4592074592
+      "perc_supply":9.6024463007,
+      "tot_supply":248500.0
     },
     {
       "index":1503,
@@ -35209,7 +35209,7 @@
       "sum_doses":21837,
       "sum_1d":14507,
       "sum_2d":7330,
-      "perc_doses":88.6,
+      "perc_doses":86.4,
       "perc_inh_tot":17.46485,
       "perc_inh_1d":11.60244,
       "perc_inh_2d":5.86241,
@@ -35219,8 +35219,8 @@
       "perc_inh_monotone_2d":5.86241,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.732425,
-      "perc_supply":9.856010158,
-      "tot_supply":24646.7268623025
+      "perc_supply":10.1069733796,
+      "tot_supply":25274.3055555556
     },
     {
       "index":1597,
@@ -37277,7 +37277,7 @@
       "sum_doses":604182,
       "sum_1d":422830,
       "sum_2d":181352,
-      "perc_doses":87.3,
+      "perc_doses":85.2,
       "perc_inh_tot":16.36217,
       "perc_inh_1d":11.45088,
       "perc_inh_2d":4.91129,
@@ -37287,8 +37287,8 @@
       "perc_inh_monotone_2d":4.91129,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.181085,
-      "perc_supply":9.371231386,
-      "tot_supply":692075.6013745705
+      "perc_supply":9.6022124413,
+      "tot_supply":709133.8028169015
     },
     {
       "index":1691,
@@ -39345,7 +39345,7 @@
       "sum_doses":790306,
       "sum_1d":548993,
       "sum_2d":241313,
-      "perc_doses":86.3,
+      "perc_doses":83.8,
       "perc_inh_tot":13.83554,
       "perc_inh_1d":9.61098,
       "perc_inh_2d":4.22456,
@@ -39355,8 +39355,8 @@
       "perc_inh_monotone_2d":4.22456,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":6.91777,
-      "perc_supply":8.0159559676,
-      "tot_supply":915765.9327925839
+      "perc_supply":8.2550954654,
+      "tot_supply":943085.9188544153
     },
     {
       "index":1785,
@@ -41413,7 +41413,7 @@
       "sum_doses":87280,
       "sum_1d":57448,
       "sum_2d":29832,
-      "perc_doses":87.6,
+      "perc_doses":85.4,
       "perc_inh_tot":16.02556,
       "perc_inh_1d":10.54808,
       "perc_inh_2d":5.47748,
@@ -41423,8 +41423,8 @@
       "perc_inh_monotone_2d":5.47748,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":8.01278,
-      "perc_supply":9.1470091324,
-      "tot_supply":99634.703196347
+      "perc_supply":9.38264637,
+      "tot_supply":102201.4051522248
     },
     {
       "index":1879,
@@ -43481,7 +43481,7 @@
       "sum_doses":215611,
       "sum_1d":156393,
       "sum_2d":59218,
-      "perc_doses":78.5,
+      "perc_doses":76.1,
       "perc_inh_tot":13.37852,
       "perc_inh_1d":9.70408,
       "perc_inh_2d":3.67444,
@@ -43491,8 +43491,8 @@
       "perc_inh_monotone_2d":3.67444,
       "date":"2021-03-29T00:00:00.000Z",
       "perc_inh":6.68926,
-      "perc_supply":8.5213503185,
-      "tot_supply":274663.694267516
+      "perc_supply":8.7900919842,
+      "tot_supply":283325.8869908016
     }
   ]
 }
