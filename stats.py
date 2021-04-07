@@ -96,6 +96,7 @@ print()
 if input("Proceed with plot? (y,[n]) ") == "y":
     df = pd.read_json(os.path.join(savefile_path,"all-regions.json"), orient="table")
     df["1d_shift"] = df.groupby(df.area).sum_1d.shift(21, fill_value = 0)
+    df["sum"] = df[["sum_1d","sum_2d"]].sum(axis=1) / 2
     regs = input("Choose regions (by area shortname, comma seperated): ")
     regs = re.split(",| ", regs.upper())
     if "ALL" in regs:
@@ -108,6 +109,8 @@ if input("Proceed with plot? (y,[n]) ") == "y":
         if field not in df.columns:
             continue
         fig, ax = plt.subplots(figsize=(10,7))
+        if field == "perc_doses":
+            ax.set_ylim(0,120)
         areaorder=df.groupby("area") \
                   .apply(lambda x: x.sort_values("date").tail(1)) \
                   .sort_values(field,ascending=False) \
@@ -144,14 +147,16 @@ if input("Proceed with plot? (y,[n]) ") == "y":
 
     if input("Plot first and second doses for each region? (y,[n]) ") == "y":
         attr=["sum_1d","sum_2d"]
-        
         for reg in regs:
           fig, ax = plt.subplots(figsize=(10,7))
           for a in attr:
             df[df.area == reg].plot(x="date", y=a, ax=ax, label=a)
-          df[df.area == reg].plot(x="date", y="1d_shift",
-                        ax=ax, label="sum_1d shift by 21 days",
-                        color="gray")
+          # df[df.area == reg].plot(x="date", y="1d_shift",
+                        # ax=ax, label="sum_1d shift by 21 days",
+                        # color="gray")
+          df[df.area == reg].plot(x="date", y="sum",
+                        ax=ax, label="(sum_1d+sum_2d)/2",
+                        color="black")
           ax.set_xlabel("")
           ax.set_title(reg)
           plt.grid(True)
