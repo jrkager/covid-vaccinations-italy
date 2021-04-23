@@ -5,6 +5,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import dates as mdates
+import datetime as dt
 from datetime import datetime
 import pandas as pd
 import re
@@ -65,7 +66,7 @@ if "all" in args.actions:
     args.actions.extend(k for k in ["vacc1", "vacc2", "used", "suppl", "period"] if k not in args.actions)
 args.actions = [k for k in args.actions if k in actions]
 if not args.actions:
-    args.actions = ["vacc2", "vacc1", "used"]
+    args.actions = ["vacc1", "vacc2", "used"]
 
 cont = {}
 savefile_path = "vacc-history/"
@@ -109,8 +110,6 @@ if input("Proceed with plot? (y,[n]) ") == "y":
         if field not in df.columns:
             continue
         fig, ax = plt.subplots(figsize=(10,7))
-        if field == "perc_doses":
-            ax.set_ylim(0,120)
         areaorder=df.groupby("area") \
                   .apply(lambda x: x.sort_values("date").tail(1)) \
                   .sort_values(field,ascending=False) \
@@ -130,7 +129,13 @@ if input("Proceed with plot? (y,[n]) ") == "y":
             if a not in regs:
                 continue
             df[df.area == a].plot(x="date", y=field, ax=ax, label=a)
-        ax.legend(ncol=2, fontsize="large")
+        if field == "perc_doses":
+            ax.set_ylim(30,120)
+            ax.set_xlim([dt.date(2021,2,1),None])
+            ax.set_yticks(range(30,130,10))
+            ax.legend(ncol=3, fontsize="large",loc="lower right")
+        else:
+            ax.legend(ncol=2, fontsize="large")
         plt.grid(True)
         plt.show()
 
