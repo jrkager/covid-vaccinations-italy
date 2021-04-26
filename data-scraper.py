@@ -29,8 +29,15 @@ def get_by_doses(untildate=None, cache=False):
     if "somm_data_cache" in globals():
         c, d = somm_data_cache
     if not cache or not "somm_data_cache" in globals():
-        url = "https://github.com/italia/covid19-opendata-vaccini/raw/master/dati/somministrazioni-vaccini-summary-latest.csv"
-        c = pd.read_csv(url)
+        url = "https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv"
+        ch = pd.read_csv(url)
+        c = ch.groupby(["data_somministrazione","fornitore","area"]).sum()[["prima_dose","seconda_dose"]]
+        c=c.unstack("fornitore",fill_value=0)
+        c["mono"]=c.prima_dose.Janssen+c.seconda_dose.Janssen
+        c.loc[:,("prima_dose","Janssen")] = 0
+        c = c.groupby(level=0, axis=1).sum()
+        c["totale"] = c.prima_dose + c.seconda_dose + c.mono
+        c.reset_index(inplace=True)
         url = "https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv"
         d = pd.read_csv(url)
     if cache:
@@ -39,7 +46,7 @@ def get_by_doses(untildate=None, cache=False):
         c = c[c.data_somministrazione <= untildate]
         d = d[d.data_consegna <= untildate]
     cm = c.groupby(c.area) \
-                .sum()[["prima_dose","seconda_dose","totale"]]
+                .sum()[["prima_dose","seconda_dose","mono","totale"]]
     dm = d.numero_dosi.groupby(d.area).sum()
     # shortname-region : {first doses given, second doses given, ..}
     merged = cm.merge(dm,how='outer',on='area').fillna(0).astype(int)

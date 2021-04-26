@@ -14,10 +14,10 @@ def round_perc(p):
     acc = 1e5
     return round(acc * p) / acc
 
-def subst_last_row(loaded, vacc_count, d1, d2, perc_of_doses, inhabitants, today):
+def subst_last_row(loaded, vacc_count, d1, d2, mono, perc_of_doses, inhabitants, today):
     loaded["sum_doses"][-1] = vacc_count
     loaded["sum_1d"][-1] = d1
-    loaded["sum_2d"][-1] = d2
+    loaded["sum_2d"][-1] = d2 + mono
     loaded["delta_1d"][-1] = loaded["sum_1d"][-1]-loaded["sum_1d"][-2]
     loaded["delta_2d"][-1] = loaded["sum_2d"][-1]-loaded["sum_2d"][-2]
     loaded["delta_all"][-1] = loaded["sum_doses"][-1]-loaded["sum_doses"][-2]
@@ -133,13 +133,13 @@ for reg_short in regions_to_consider:
                 d = {'prima_dose': 0, 'seconda_dose': 0, 'totale': 0, 'numero_dosi': 0}
             else:
                 d = d[reg_short]
-            add_row(loaded, d["totale"], d["prima_dose"], d["seconda_dose"],
+            add_row(loaded, d["totale"], d["prima_dose"], d["seconda_dose"], d["mono"],
                     round(1000*d["totale"]/d["numero_dosi"])/10, inhabitants[reg_short], date)
         changed = True
     else:
         today_count = regjs[reg_short][0]
         d1_count = dose_numbers[reg_short]["prima_dose"]
-        d2_count = dose_numbers[reg_short]["seconda_dose"]
+        d2_count = dose_numbers[reg_short]["seconda_dose"] + dose_numbers[reg_short]["mono"]
         perc_of_doses = 100 * regjs[reg_short][1]
         # print("Today counter {}: {}".format(reg_short,today_count))
 
@@ -162,12 +162,12 @@ for reg_short in regions_to_consider:
                                          interpolation_perc,
                                          interpolation_date):
                 # add row to csv data
-                add_row(loaded, count, d1, d2, perc, inhabitants[reg_short], date)
+                add_row(loaded, count, d1, d2, 0, perc, inhabitants[reg_short], date)
             changed = True
         elif loaded["sum_doses"][-1] != today_count or loaded["perc_doses"][-1] != round_perc(perc_of_doses):
             # if we started the script for a second time this day, substitute last line with new data
             print("{}: subsitute today with updated calculations".format(reg_long))
-            subst_last_row(loaded, today_count, d1_count, d2_count, perc_of_doses, inhabitants[reg_short], today)
+            subst_last_row(loaded, today_count, d1_count, d2_count, 0, perc_of_doses, inhabitants[reg_short], today)
             changed = True
 
     if changed:
