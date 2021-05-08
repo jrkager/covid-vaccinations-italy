@@ -63,10 +63,10 @@ tostring = { "vacc" : # n vaccines in percentage to total population
 
 
 if "all" in args.actions:
-    args.actions.extend(k for k in ["vacc1", "vacc2", "used", "suppl", "period"] if k not in args.actions)
+    args.actions.extend(k for k in ["vacc", "vacc1", "vacc2", "used", "suppl"] if k not in args.actions)
 args.actions = [k for k in args.actions if k in actions]
 if not args.actions:
-    args.actions = ["vacc1", "vacc2", "used"]
+    args.actions = ["vacc1", "vacc2", "vacc", "used"]
 
 cont = {}
 savefile_path = "vacc-history/"
