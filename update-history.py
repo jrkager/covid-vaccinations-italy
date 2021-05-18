@@ -16,7 +16,7 @@ def round_perc(p):
 
 def subst_last_row(loaded, vacc_count, d1, d2, mono, perc_of_doses, inhabitants, today):
     loaded["sum_doses"][-1] = vacc_count
-    loaded["sum_1d"][-1] = d1
+    loaded["sum_1d"][-1] = d1 + mono
     loaded["sum_2d"][-1] = d2 + mono
     loaded["delta_1d"][-1] = loaded["sum_1d"][-1]-loaded["sum_1d"][-2]
     loaded["delta_2d"][-1] = loaded["sum_2d"][-1]-loaded["sum_2d"][-2]
@@ -138,7 +138,7 @@ for reg_short in regions_to_consider:
         changed = True
     else:
         today_count = regjs[reg_short][0]
-        d1_count = dose_numbers[reg_short]["prima_dose"]
+        d1_count = dose_numbers[reg_short]["prima_dose"] + dose_numbers[reg_short]["mono"]
         d2_count = dose_numbers[reg_short]["seconda_dose"] + dose_numbers[reg_short]["mono"]
         perc_of_doses = 100 * regjs[reg_short][1]
         # print("Today counter {}: {}".format(reg_short,today_count))
