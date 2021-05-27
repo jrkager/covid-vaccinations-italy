@@ -10217,7 +10217,7 @@
       "sum_doses":3168969,
       "sum_1d":2224616,
       "sum_2d":1011219,
-      "perc_doses":89.3,
+      "perc_doses":89.2,
       "perc_inh_tot":55.05793,
       "perc_inh_1d":38.65066,
       "perc_inh_2d":17.569,
@@ -10227,8 +10227,8 @@
       "perc_inh_monotone_2d":17.569,
       "date":"2021-05-28T00:00:00.000Z",
       "perc_inh":27.528965,
-      "perc_supply":30.8275083987,
-      "tot_supply":3548677.4916013442
+      "perc_supply":30.8620683857,
+      "tot_supply":3552655.8295964124
     },
     {
       "index":461,
@@ -13605,7 +13605,7 @@
       "sum_doses":686058,
       "sum_1d":473350,
       "sum_2d":223872,
-      "perc_doses":89.1,
+      "perc_doses":87.9,
       "perc_inh_tot":56.87688,
       "perc_inh_1d":39.24256,
       "perc_inh_2d":18.55986,
@@ -13615,8 +13615,8 @@
       "perc_inh_monotone_2d":18.55986,
       "date":"2021-05-28T00:00:00.000Z",
       "perc_inh":28.43844,
-      "perc_supply":31.9174410774,
-      "tot_supply":769986.531986532
+      "perc_supply":32.3531740614,
+      "tot_supply":780498.2935153582
     },
     {
       "index":615,
@@ -47485,7 +47485,7 @@
       "sum_doses":2678538,
       "sum_1d":1811424,
       "sum_2d":902055,
-      "perc_doses":93.5,
+      "perc_doses":92.9,
       "perc_inh_tot":54.89783,
       "perc_inh_1d":37.12594,
       "perc_inh_2d":18.48802,
@@ -47495,8 +47495,8 @@
       "perc_inh_monotone_2d":18.48802,
       "date":"2021-05-28T00:00:00.000Z",
       "perc_inh":27.448915,
-      "perc_supply":29.3571283422,
-      "tot_supply":2864746.5240641711
+      "perc_supply":29.5467330463,
+      "tot_supply":2883248.6544671687
     },
     {
       "index":2155,
@@ -64425,7 +64425,7 @@
       "sum_doses":3088409,
       "sum_1d":2153228,
       "sum_2d":983341,
-      "perc_doses":92.4,
+      "perc_doses":91.0,
       "perc_inh_tot":54.06743,
       "perc_inh_1d":37.69562,
       "perc_inh_2d":17.21492,
@@ -64435,8 +64435,8 @@
       "perc_inh_monotone_2d":17.21492,
       "date":"2021-05-28T00:00:00.000Z",
       "perc_inh":27.033715,
-      "perc_supply":29.257267316,
-      "tot_supply":3342433.9826839822
+      "perc_supply":29.7073791209,
+      "tot_supply":3393856.0439560437
     },
     {
       "index":2925,
