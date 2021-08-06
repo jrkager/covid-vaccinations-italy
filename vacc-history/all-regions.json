@@ -73973,7 +73973,7 @@
       "sum_doses":12559471,
       "sum_1d":6800902,
       "sum_2d":5847061,
-      "perc_doses":98.7,
+      "perc_doses":98.3,
       "perc_inh_tot":125.249,
       "perc_inh_1d":67.82182,
       "perc_inh_2d":58.30966,
@@ -73983,8 +73983,8 @@
       "perc_inh_monotone_2d":58.30966,
       "date":"2021-08-06T00:00:00.000Z",
       "perc_inh":62.6245,
-      "perc_supply":63.4493414387,
-      "tot_supply":12724894.6301925033
+      "perc_supply":63.7075279756,
+      "tot_supply":12776674.4659206513
     },
     {
       "index":3359,
