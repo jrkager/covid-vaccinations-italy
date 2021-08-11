@@ -31,9 +31,10 @@ def get_by_doses(untildate=None, cache=False):
     if not cache or not "somm_data_cache" in globals():
         url = "https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv"
         ch = pd.read_csv(url)
-        c = ch.groupby(["data_somministrazione","fornitore","area"]).sum()[["prima_dose","seconda_dose"]]
+        c = ch.groupby(["data_somministrazione","fornitore","area"]).sum()[["prima_dose","seconda_dose","pregressa_infezione"]]
         c=c.unstack("fornitore",fill_value=0)
-        c["mono"]=c.prima_dose.Janssen+c.seconda_dose.Janssen
+#         breakpoint()
+        c["mono"]=c.prima_dose.Janssen+c.seconda_dose.Janssen+c.pregressa_infezione.sum(axis=1)
         c.loc[:,("prima_dose","Janssen")] = 0
         c = c.groupby(level=0, axis=1).sum()
         c["totale"] = c.prima_dose + c.seconda_dose + c.mono
