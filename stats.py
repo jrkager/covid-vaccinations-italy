@@ -21,6 +21,8 @@ actions = { "vacc" : # n/2 vaccines in percentage to total population
                 lambda vals: vals.perc_inh_tot/2,
             "suppl" : # this ratio of population could get vaccined (2 doses) with current supply
                 lambda vals: 100 * vals.perc_inh_tot / vals.perc_doses / 2,
+            "suppl1" : # this ratio of population could get vaccined (2 doses) with current supply
+                lambda vals: 100 * vals.perc_inh_tot / vals.perc_doses,
             "used" : # doses used out of supplied ones
                 lambda vals: vals.perc_doses,
             "vacc1" :
@@ -33,6 +35,7 @@ actions = { "vacc" : # n/2 vaccines in percentage to total population
 
 order = {    "vacc" : -1,
             "suppl" : -1,
+            "suppl1" : -1,
             "used" : -1,
             "vacc1" : -1,
             "vacc2" : -1,
@@ -41,6 +44,7 @@ order = {    "vacc" : -1,
 
 name = {    "vacc" : "tot of pop.",
             "suppl" : "supply",
+            "suppl1" : "supply",
             "used" : "of doses",
             "vacc1" : "1d of pop.",
             "vacc2" : "2d of pop.",
@@ -50,6 +54,8 @@ name = {    "vacc" : "tot of pop.",
 tostring = { "vacc" : # n vaccines in percentage to total population
                 lambda v, s: f"{v: {s}.2f}%",
             "suppl" : # this ratio of population could get vaccined (2 doses) with current supply
+                lambda v, s: f"{v: {s}.2f}%",
+            "suppl1" : # this ratio of population could get vaccined (2 doses) with current supply
                 lambda v, s: f"{v: {s}.2f}%",
             "used" : # doses used out of supplied ones
                 lambda v, s: f"{v: {s}.2f}%",
